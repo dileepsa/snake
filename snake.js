@@ -1,6 +1,7 @@
 const { Box } = require('./box.js');
 const { stdout, stdin } = require('process');
 const EventEmitter = require('events');
+const HIDDEN_CURSOR = '\x1B[?25l';
 
 class Snake {
   constructor(x, y) {
@@ -8,11 +9,12 @@ class Snake {
     this.y = y;
   }
 
-  isDied(boxX, boxY, height, width) {
-    if (this.x < boxX) return true;
-    if (this.x > boxX + width) return true;
-    if (this.y > boxY + height) return true;
-    if (this.y < boxY) return true;
+  isTouched({ x, y, height, width }) {
+    if (this.x <= x) return true;
+    if (this.x >= x + width) return true;
+    if (this.y >= y + height) return true;
+    if (this.y <= y) return true;
+    return false;
   }
 
   move(dx, dy) {
@@ -31,12 +33,19 @@ class Snake {
   }
 }
 
-const resetCursor = () => {
+const resetScreen = () => {
   stdout.cursorTo(70, 10);
 };
 
+const setupScreen = () => {
+  stdout.cursorTo(0, 0);
+  stdout.write(HIDDEN_CURSOR);
+  stdout.clearScreenDown();
+}
+
 const main = () => {
-  const box = new Box(50, 10, 10, 30);
+  setupScreen();
+  const box = new Box(50, 10, 20, 30);
   box.drawBox();
   const snake = new Snake(51, 11);
   snake.drawSnake();
@@ -56,9 +65,9 @@ const main = () => {
   stdin.on('data', (key) => {
     snake.eraseSnake();
     eventEmitter.emit(key.toString());
-    if (snake.isDied(50, 10, 10, 30)) {
+    if (snake.isTouched(box)) {
       stdout.write('You Died!!!!!!!!!!!!!!!!');
-      resetCursor();
+      resetScreen();
       process.exit();
     }
     snake.drawSnake();
