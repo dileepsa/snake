@@ -1,9 +1,9 @@
 const { stdout } = require('process');
 
 class Box {
-  constructor(x, y, height, width) {
-    this.x = x;
-    this.y = y;
+  constructor(height, width) {
+    this.x = 50;
+    this.y = 10;
     this.height = height;
     this.width = width;
   }
