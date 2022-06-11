@@ -28,6 +28,10 @@ class Snake {
     stdout.cursorTo(this.x, this.y);
     stdout.write(' ');
   }
+
+  hasEaten({ x, y }) {
+    return this.x === x && this.y === y;
+  }
 };
 
 module.exports = { Snake };
