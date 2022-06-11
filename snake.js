@@ -1,5 +1,6 @@
 const { Box } = require('./box.js');
-const { stdout } = require('process');
+const { stdout, stdin } = require('process');
+const EventEmitter = require('events');
 
 class Snake {
   constructor(x, y) {
@@ -31,7 +32,7 @@ class Snake {
 }
 
 const resetCursor = () => {
-  stdout.cursorTo(60, 10)
+  stdout.cursorTo(70, 10);
 };
 
 const main = () => {
@@ -39,12 +40,29 @@ const main = () => {
   box.drawBox();
   const snake = new Snake(51, 11);
   snake.drawSnake();
-  setTimeout(() => {
+  const upKey = 'w';
+  const leftKey = 'a';
+  const downKey = 's';
+  const rightKey = 'd'
+  const eventEmitter = new EventEmitter();
+
+  eventEmitter.on(leftKey, () => snake.move(-1, 0));
+  eventEmitter.on(rightKey, () => snake.move(1, 0));
+  eventEmitter.on(upKey, () => snake.move(0, -1));
+  eventEmitter.on(downKey, () => snake.move(0, 1));
+
+  stdin.setRawMode(true);
+
+  stdin.on('data', (key) => {
     snake.eraseSnake();
-    snake.move(0, 1);
+    eventEmitter.emit(key.toString());
+    if (snake.isDied(50, 10, 10, 30)) {
+      stdout.write('You Died!!!!!!!!!!!!!!!!');
+      resetCursor();
+      process.exit();
+    }
     snake.drawSnake();
-    resetCursor();
-  }, 3000)
+  })
 };
 
 main();
