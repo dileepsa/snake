@@ -1,5 +1,7 @@
 const { stdout } = require('process');
 
+const SNAKE = '🐸';
+
 class Snake {
   constructor(x, y) {
     this.x = x;
@@ -21,7 +23,7 @@ class Snake {
 
   drawSnake() {
     stdout.cursorTo(this.x, this.y);
-    stdout.write('🐸');
+    stdout.write(SNAKE);
   }
 
   eraseSnake() {

@@ -17,10 +17,10 @@ const setupScreen = () => {
 };
 
 const setEvents = (snake) => {
-  const upKey = 'w';
-  const leftKey = 'a';
-  const downKey = 's';
-  const rightKey = 'd'
+  const upKey = '\x1B[A';
+  const leftKey = '\x1B[D';
+  const downKey = '\x1B[B';
+  const rightKey = '\x1B[C';
   const events = new EventEmitter();
 
   events.on(leftKey, () => snake.move(-1, 0));

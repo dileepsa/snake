@@ -47,12 +47,19 @@ stdin.setRawMode(true);
 // main();
 
 // const { stdout, stdin } = process;
-const CTRL_C = 3;
+const keys = [];
 const main = () => {
   stdin.setRawMode(true);
-  stdin.on('data', (buffer) => {
-    console.log(buffer.toString(), '=>', ...buffer);
-    if (buffer[0] === CTRL_C) setTimeout(() => process.exit(0), 2000);
+  stdin.on('data', (key) => {
+    keys.push(key);
+    if (key === 'q') {
+      process.exit(0)
+    }
   })
-};
+
+  setTimeout(() => {
+    console.log(keys);
+  }, 5000);
+}
+
 main();
