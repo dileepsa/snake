@@ -7,17 +7,23 @@ const randomNumber = (limit) => {
 }
 
 class Food {
+  #x;
+  #y;
   constructor(x, y) {
-    this.x = x;
-    this.y = y;
+    this.#x = x;
+    this.#y = y;
   }
 
   drawFood({ x, y, height, width }) {
     const startPoint = { x, y };
-    this.x = startPoint.x + 1 + randomNumber(width - 5);
-    this.y = startPoint.y + 1 + randomNumber(height - 10);
-    stdout.cursorTo(this.x, this.y);
+    this.#x = startPoint.x + 1 + randomNumber(width - 5);
+    this.#y = startPoint.y + 1 + randomNumber(height - 10);
+    stdout.cursorTo(this.#x, this.#y);
     stdout.write(FOOD);
+  }
+
+  getPositions() {
+    return { x: this.#x, y: this.#y };
   }
 };
 

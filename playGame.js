@@ -7,7 +7,8 @@ const EventEmitter = require('events');
 const HIDDEN_CURSOR = '\x1B[?25l';
 
 const resetScreen = () => {
-  stdout.cursorTo(70, 10);
+  stdout.clearScreenDown();
+  stdout.cursorTo(0, 0);
 };
 
 const setupScreen = () => {
@@ -33,11 +34,11 @@ const setEvents = (snake) => {
 const playGame = (events, key, box, snake, food) => {
   snake.eraseSnake();
   events.emit(key.toString());
-  if (snake.hasEaten(food)) {
-    food.drawFood(box);
+  if (snake.hasEaten(food.getPositions())) {
+    food.drawFood(box.getBox());
   }
 
-  if (snake.isTouched(box)) {
+  if (snake.isTouched(box.getBox())) {
     stdout.write('You Died!!!!!!!!!!!!!!!!');
     resetScreen();
     process.exit(0);
@@ -55,7 +56,7 @@ const main = () => {
   snake.drawSnake();
 
   const food = new Food(57, 13);
-  food.drawFood(box);
+  food.drawFood(box.getBox());
 
   const events = setEvents(snake);
   stdin.setRawMode(true);
